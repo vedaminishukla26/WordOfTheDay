@@ -4,23 +4,36 @@ import WordSelectors from "../selectors/wordSelectors"
 import WordActions from "../actions/word"
 import styles from "../styles/homePage"
 import isEmpty from "../utils/isEmpty"
+import { useNavigation } from "@react-navigation/native"
 
 const HomePage = () => {
     const dispatch = useDispatch()
     const word = useSelector(WordSelectors.getWord)
     const meanings = useSelector(WordSelectors.getMeanings)
+    const navigation = useNavigation()
     const onCtaPress = () => {
         console.log("ctapressed")
         dispatch(WordActions.fetchWord())
     }
 
+    const viewHistoryPress = () => {
+        navigation.navigate('History')
+    }
+
     return (
         <View style={styles.screen} >
-            <TouchableOpacity style={styles.btn} onPress={onCtaPress}>
-                <Text style={styles.ctaText} >
-                    Fetch Word
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.row} > 
+                <TouchableOpacity style={styles.btn} onPress={onCtaPress}>
+                    <Text style={styles.ctaText} >
+                        New Word
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.btn, { backgroundColor: 'orange' }]} onPress={viewHistoryPress}>
+                    <Text style={styles.ctaText} >
+                        View History
+                    </Text>
+                </TouchableOpacity>
+            </View>
             {word && (<Text style={styles.word} >
                 Word of the Day:: {word}
             </Text>)}

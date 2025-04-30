@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
         marginBottom: 8,
         width: '100%'
     }

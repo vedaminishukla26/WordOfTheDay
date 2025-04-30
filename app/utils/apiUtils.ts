@@ -11,6 +11,11 @@ export const defaultHeaders = {
     'Content-Type': 'application/json'
 }
 
+export const authHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${process.env.OPEN_AI_KEY}`
+}
+
 export const getRequestOptions = (url: string, method: string, headers: Object, body?: Object) => {
     const payload = {
         url, 

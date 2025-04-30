@@ -3,7 +3,7 @@ const actionTypePrefix = 'WORD'
 export const WordActionTypes = {
    FETCH_WORD: `${actionTypePrefix}/FETCH_WORD`,
    FETCH_WORD_SUCCESS: `${actionTypePrefix}/FETCH_WORD_SUCCESS`,
-   FETCH_WORD_FAILURE: `${actionTypePrefix}/FETCH_WORD_FAILURE`, 
+   FETCH_WORD_FAILURE: `${actionTypePrefix}/FETCH_WORD_FAILURE` 
 }
 
 const fetchWord = (payload?: {}) => ({

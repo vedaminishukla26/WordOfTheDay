@@ -23,7 +23,16 @@ const fetchWord : Epic<AnyAction, AnyAction, RootState, Dependencies> = ($action
         .pipe(mergeMap(({response} : AjaxResponse<any>) => {
             console.log('Parjanya', response)
             if(!isEmpty(response)) {
-                return of(WordActions.fetchWordSuccess(response))
+                const reqOpts = getRequestOptions(apis.fetchWordExample(response.word.word), requestTypes.GET, apiUtils.getAuthHeaders(), body)
+                return ajax(reqOpts).pipe(mergeMap(({res} : AjaxResponse<any>) => {
+                    console.log('Parjanya2', res)
+                    if(res && !isEmpty(res)) {
+                        return of(WordActions.fetchWordSuccess({
+                           ...response,
+                           examples: 
+                        }))
+                    }
+                }))
             }
             return of();
         }),
