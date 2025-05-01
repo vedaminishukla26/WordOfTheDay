@@ -1,11 +1,9 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
 import WordActions, { WordActionTypes } from "../actions/word";
 import { catchError, mergeMap, of } from "rxjs";
-import apis from '../config/api'
-import { defaultHeaders, getRequestOptions, requestTypes } from '../utils/apiUtils'
-import isEmpty from '../utils/isEmpty'
 import { ajax, AjaxResponse } from "rxjs/ajax";
 import { AnyAction } from "redux";
+import wordsData from '../data/words.json';
 
 interface Dependencies {
     ajax: typeof ajax;
@@ -16,31 +14,15 @@ interface Dependencies {
 const fetchWord : Epic<AnyAction, AnyAction, RootState, Dependencies> = ($action, store, { ajax }) => (
     $action.pipe(ofType(WordActionTypes.FETCH_WORD), 
     mergeMap(({ payload }) => {
-        const api = apis.fetchWord()
-        const body = {}
-        const requestOptions = getRequestOptions(api, requestTypes.GET, defaultHeaders, body)
-        return ajax(requestOptions)
-        .pipe(mergeMap(({response} : AjaxResponse<any>) => {
-            console.log('Parjanya', response)
-            if(!isEmpty(response)) {
-                const reqOpts = getRequestOptions(apis.fetchWordExample(response.word.word), requestTypes.GET, apiUtils.getAuthHeaders(), body)
-                return ajax(reqOpts).pipe(mergeMap(({res} : AjaxResponse<any>) => {
-                    console.log('Parjanya2', res)
-                    if(res && !isEmpty(res)) {
-                        return of(WordActions.fetchWordSuccess({
-                           ...response,
-                           examples: 
-                        }))
-                    }
-                }))
-            }
-            return of();
-        }),
-        catchError(err => of(WordActions.fetchWordFailure(err)))
-        ) 
+        const currentDate = new Date(Date.now())
+        const startDate = new Date('2025-04-29T00:00:00')
+        var index = (currentDate - startDate) / (24 * 3600 * 1000) 
+        index = Math.floor(index)
+        console.log(index, wordsData[index])
+        const currWord =  { ...wordsData[index], date: currentDate.toDateString()}
+        return of(WordActions.fetchWordSuccess(currWord))
     }))
 )
-
 
 export default combineEpics(
     fetchWord

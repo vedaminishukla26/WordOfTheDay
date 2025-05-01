@@ -46,7 +46,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         marginBottom: 8,
         width: '100%'
-    }
+    },
+    itemText: {
+        color: 'blue',
+        fontSize: 24,
+        paddingHorizontal: 8,
+        paddingVertical: 8 
+     }
 })
 
 export default styles

@@ -4,8 +4,7 @@ import ajax from "./ajax";
 import rootReducer from "./rootReducer";
 import rootEpic from "./rootEpic";
 
-const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers =(__DEV__ && typeof window !== 'undefined' && (window as any)._REDUX_DEVTOOLS_EXTENSION_COMPOSE_) || compose;
 
 const epicMiddleware = createEpicMiddleware<any, any, any, any>({
     dependencies: {

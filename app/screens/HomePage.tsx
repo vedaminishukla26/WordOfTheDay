@@ -5,16 +5,27 @@ import WordActions from "../actions/word"
 import styles from "../styles/homePage"
 import isEmpty from "../utils/isEmpty"
 import { useNavigation } from "@react-navigation/native"
+import { useEffect } from "react"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomePage = () => {
     const dispatch = useDispatch()
     const word = useSelector(WordSelectors.getWord)
     const meanings = useSelector(WordSelectors.getMeanings)
+    const examples = useSelector(WordSelectors.getExamples)
+    const history = useSelector(WordSelectors.getHistory)
     const navigation = useNavigation()
     const onCtaPress = () => {
-        console.log("ctapressed")
         dispatch(WordActions.fetchWord())
     }
+
+
+    useEffect(() => {
+        if(!isEmpty(history)) {
+            const saveStorage = async () => await AsyncStorage.setItem('history', JSON.stringify(history));
+            saveStorage()
+        }
+    }, [history])
 
     const viewHistoryPress = () => {
         navigation.navigate('History')
@@ -37,22 +48,21 @@ const HomePage = () => {
             {word && (<Text style={styles.word} >
                 Word of the Day:: {word}
             </Text>)}
-            {meanings && !isEmpty(meanings) && (
-                <View style={{ flex: 1 }} >
-                <FlatList
-                ItemSeparatorComponent={() => <View style={styles.separator} />} 
-                ListHeaderComponent={() => { if (meanings) return (<Text style={styles.header} >Meanings</Text>); return (<View />) }}
-                data={meanings}
-                contentContainerStyle={styles.list}
-                renderItem={({item}) => <Text>{item}</Text>}
-                style={styles.listContainer}
-            />
-            </View>
-            )}
+            {meanings && (<Text style={styles.word} >
+                Meaning:: {meanings}
+            </Text>)}
+            <FlatList
+                data={examples}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item }) => (
+                    <Text style={styles.itemText}>{item}</Text>
+                )}
+                ItemSeparatorComponent={() => (<View style={{ height: 1, backgroundColor: 'gray', width: '100%' }} />)} // Add a separator between items
+                />
+            
            
         </View>
     )
 }
 
 export default HomePage
-

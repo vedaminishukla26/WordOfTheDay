@@ -5,13 +5,13 @@ const initialState = {
     date: '',
     wordOfTheDayLoader: false,
     wordOfTheDayError: null,
-    meanings: [],
+    meanings: '',
     examples: [],
     history: []
 }
 
 const wordReducer = (state = initialState, action: { type: string, payload: any }) => {
-    console.log(action.type)
+    console.log(action.type, action.payload)
     switch (action.type) {
         case WordActionTypes.FETCH_WORD: 
             return {
@@ -20,12 +20,26 @@ const wordReducer = (state = initialState, action: { type: string, payload: any 
                 wordOfTheDayError: null
             }
         case WordActionTypes.FETCH_WORD_SUCCESS: 
+            if (action.payload in state.history) {
+                return {
+                    
+                        ...state,
+                        wordOfTheDayLoader: false,
+                        wordOfTheDay: action.payload.word,
+                        date: action.payload.date,
+                        meaning: action.payload.meaning,
+                        examples: action.payload.examples
+                    
+                }
+            }
             return {
                 ...state,
                 wordOfTheDayLoader: false,
-                wordOfTheDay: action.payload.word.word,
+                wordOfTheDay: action.payload.word,
                 date: action.payload.date,
-                meanings: action.payload.word.definitions
+                meaning: action.payload.meaning,
+                examples: action.payload.examples,
+                history: [...state.history, action.payload]
             }
         case WordActionTypes.FETCH_WORD_FAILURE: 
             return {
